@@ -62,7 +62,7 @@ export default function Admin() {
         await updateDoc(docRef, {
           start: false,
         });
-      }, 5000);
+      }, 10100);
     }
   };
 

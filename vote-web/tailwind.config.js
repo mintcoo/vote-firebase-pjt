@@ -30,6 +30,50 @@ module.exports = {
         "3vw": "3vw",
         "30vw": "30vw",
       },
+      animation: {
+        ring: "ring 3.5s ease-in-out infinite",
+      },
+      keyframes: {
+        bounce: {
+          "0%, 100%": {
+            transform: "translateY(-8%)",
+            "animation-timing-function": "cubic-bezier(0.8,0,1,1)",
+          },
+          "50%": {
+            transform: "translateY(0)",
+            "animation-timing-function": "cubic-bezier(0,0,0.2,1)",
+          },
+        },
+        ring: {
+          "0%": {
+            transform: "rotate(0deg)",
+          },
+          "15%": {
+            transform: "rotate(20deg)",
+          },
+          "30%": {
+            transform: "rotate(-20deg)",
+          },
+          "40%": {
+            transform: "rotate(10deg)",
+          },
+          "50%": {
+            transform: "rotate(-10deg)",
+          },
+          "60%": {
+            transform: "rotate(5deg)",
+          },
+          "70%": {
+            transform: "rotate(-5deg)",
+          },
+          "80%": {
+            transform: "rotate(0deg)",
+          },
+          "100%": {
+            transform: "rotate(0deg)",
+          },
+        },
+      },
     },
   },
   plugins: [],
