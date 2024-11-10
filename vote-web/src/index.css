@@ -11,3 +11,26 @@ body {
   font-family: "Pretendard";
   src: url("../public/fonts/PretendardVariable.ttf");
 }
+
+@layer components {
+  .f-c-c {
+    @apply flex items-center justify-center;
+  }
+  .f-c-c-c {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  /* 버튼 모음 */
+  .btn-white {
+    @apply rounded border border-sky-900 text-sm text-sky-950 bg-white hover:bg-sky-50 font-semibold;
+  }
+  .btn-red-outlined {
+    @apply rounded border border-red-500 text-sm text-red-700 bg-white hover:bg-red-100 font-semibold;
+  }
+  .btn-dark-blue {
+    @apply rounded border border-sky-900  bg-sky-900 text-sm text-white hover:bg-sky-800;
+  }
+  .btn-blue {
+    @apply rounded border border-sky-900  bg-sky-600 text-sm text-white hover:bg-sky-500;
+  }
+}

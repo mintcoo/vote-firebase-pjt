@@ -1,14 +1,15 @@
+import Admin from "pages/Admin";
+import Home from "pages/Home";
+import Login from "pages/Login";
 import { Route, Routes } from "react-router-dom";
 
 function Router() {
   return (
     <Routes>
-      {/* <Route path="" element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/order" element={<Order />} />
-        <Route path="/complete" element={<Complete />} />
-        <Route path="/error" element={<Error />} />
-      </Route> */}
+      <Route path="/login" element={<Login />} />
+
+      <Route path="/" element={<Home />} />
+      <Route path="/admin" element={<Admin />} />
     </Routes>
   );
 }

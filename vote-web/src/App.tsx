@@ -1,7 +1,7 @@
-import React from "react";
+import Router from "Router";
 
 function App() {
-  return <div className="text-4xl font-bold">테일윈드 되었냐</div>;
+  return <Router />;
 }
 
 export default App;
