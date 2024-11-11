@@ -40,7 +40,7 @@ export default function Admin() {
     // 투표중인 팀 세팅
     try {
       if (querySnapshot.empty) {
-        // 문서가 없는 경우
+        // 투표중인 팀 문서가 없는 경우
         await addDoc(votingRef, {
           start: true,
           name: selectedTeam,
@@ -79,11 +79,16 @@ export default function Admin() {
 
       if (querySnapshot.empty) {
         // 문서가 없는 경우
-        await addDoc(teamRef, {
+        const newDocRef = await addDoc(teamRef, {
           index: 0 + teams.length,
           name: inputTeamName,
           start: false,
           likeAmount: 0,
+        });
+        // 투표현황 데이터 세팅
+        const voteStatusRef = collection(newDocRef, "투표현황");
+        await addDoc(voteStatusRef, {
+          nickName: "세팅",
         });
       }
     } catch (e) {
@@ -137,9 +142,9 @@ export default function Admin() {
   return (
     <div className="flex flex-col items-center w-full h-screen bg-teal-100">
       <div className="f-c-c-c h-35vh">
-        <h1 className="text-3xl font-bold text-blue-700 mb-5">팀 관리</h1>
+        <h1 className="mb-5 text-3xl font-bold text-blue-700">팀 관리</h1>
         {/* 팀 버튼들 */}
-        <div className="flex flex-wrap gap-3 p-3 bg-white rounded-lg shadow-md w-full max-w-2xl">
+        <div className="flex flex-wrap w-full max-w-2xl gap-3 p-3 bg-white rounded-lg shadow-md">
           {teams.map((team, index) => (
             <button
               key={index}
@@ -182,13 +187,13 @@ export default function Admin() {
         />
         <button
           onClick={addTeam}
-          className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-200"
+          className="px-4 py-2 text-white transition duration-200 bg-blue-500 rounded-md hover:bg-blue-600"
         >
           팀 추가
         </button>
       </div>
       {selectedTeam && (
-        <button onClick={onStartVote} className="btn-dark-blue px-7 py-2 mt-10">
+        <button onClick={onStartVote} className="py-2 mt-10 btn-dark-blue px-7">
           투표 시작
         </button>
       )}

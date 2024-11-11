@@ -1,9 +1,14 @@
 import { db } from "fbase";
 import {
+  addDoc,
   collection,
+  deleteDoc,
+  doc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { Unsubscribe } from "firebase/auth";
@@ -13,6 +18,7 @@ import "./App.scss";
 const SECONDS = 10;
 
 export default function Home() {
+  const nickName = sessionStorage.getItem("nickname");
   // 닉네임 오버레이
   const [isOverlayVisible, setOverlayVisible] = useState<boolean>(false);
   const [voteTeam, setVoteTeam] = useState<any>("");
@@ -28,7 +34,6 @@ export default function Home() {
 
     const unsubscribe = await onSnapshot(voteQuery, (snapshot) => {
       snapshot.docs.map((doc, idx) => {
-        console.log(doc.data(), idx, "22222222");
         const { start } = doc.data();
 
         setVoteTeam(doc.data());
@@ -84,44 +89,105 @@ export default function Home() {
     }
   }, []);
 
-  const onClickHeart = () => {
-    setHeartClicked((prev) => !prev);
+  // 투표하기
+  const onClickVote = async () => {
+    const teamRef = collection(db, "참가팀");
+    const teamQuery = query(teamRef, where("name", "==", voteTeam.name));
+    const querySnapshot = await getDocs(teamQuery);
+
+    // 팀 문서가 존재하는지 확인
+    if (!querySnapshot.empty) {
+      const voteDocId = querySnapshot.docs[0].id;
+      const voteStatusRef = collection(db, "참가팀", voteDocId, "투표현황");
+
+      // 닉네임 중복 방지용 쿼리
+      const nickNameQuery = query(
+        voteStatusRef,
+        where("nickName", "==", nickName),
+      );
+      const nickNameSnapshot = await getDocs(nickNameQuery);
+
+      if (nickNameSnapshot.empty) {
+        // 닉네임이 중복되지 않은 경우에만 추가
+        await addDoc(voteStatusRef, {
+          nickName: nickName,
+        });
+      } else {
+        console.log("이미 투표한 사용자입니다.");
+      }
+    } else {
+      console.log("팀을 찾을 수 없습니다.");
+    }
+    setHeartClicked(true);
+  };
+
+  // 투표취소
+  const onClickCancelVote = async () => {
+    try {
+      const teamRef = collection(db, "참가팀");
+      const teamQuery = query(teamRef, where("name", "==", voteTeam.name));
+      const querySnapshot = await getDocs(teamQuery);
+      if (!querySnapshot.empty) {
+        const voteDocId = querySnapshot.docs[0].id;
+        const voteStatusRef = collection(db, "참가팀", voteDocId, "투표현황");
+        const nickNameQuery = query(
+          voteStatusRef,
+          where("nickName", "==", nickName),
+        );
+        const nickNameSnapshot = await getDocs(nickNameQuery);
+
+        if (!nickNameSnapshot.empty) {
+          // 일치하는 닉네임을 가진 문서가 있는 경우, 해당 문서 삭제
+          const deleteDocId = nickNameSnapshot.docs[0].id;
+          const docRef = doc(voteStatusRef, deleteDocId);
+          await deleteDoc(docRef);
+          console.log("투표 취소 완료");
+        } else {
+          console.log("투표 기록이 없습니다.");
+        }
+      } else {
+        console.log("해당 팀이 존재하지 않습니다.");
+      }
+    } catch (e) {
+      console.log("Error deleting vote record: ", e);
+    }
+    setHeartClicked(false);
   };
 
   return (
-    <div className="f-c-c-c w-full h-screen bg-gradient-to-r from-blue-300 to-blue-600">
+    <div className="w-full h-screen f-c-c-c bg-gradient-to-r from-blue-300 to-blue-600">
       {/* 오버레이 */}
       {isOverlayVisible && (
-        <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-85 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-            <h2 className="text-xl font-semibold mb-4">닉네임을 입력하세요</h2>
+        <div className="absolute top-0 bottom-0 left-0 right-0 z-50 flex items-center justify-center bg-black bg-opacity-85">
+          <div className="p-6 bg-white rounded-lg shadow-lg w-80">
+            <h2 className="mb-4 text-xl font-semibold">닉네임을 입력하세요</h2>
             <input
               type="text"
               maxLength={7}
               value={nickname || ""}
               onChange={(e) => setNickname(e.target.value)}
               placeholder="닉네임 입력"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 mb-4"
+              className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
             <button
               onClick={handleNicknameSubmit}
-              className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200"
+              className="w-full px-4 py-2 text-white transition duration-200 bg-blue-500 rounded-md hover:bg-blue-600"
             >
               닉네임 등록
             </button>
           </div>
         </div>
       )}
-      <div className="absolute top-0 left-0 right-0 p-5 text-center text-white text-3xl font-bold shadow-md">
+      <div className="absolute top-0 left-0 right-0 p-5 text-3xl font-bold text-center text-white shadow-md">
         경기창조혁신센터 화이팅
       </div>
       {isVoteStart ? (
         <>
-          <div className="text-center -mb-28">
-            <div className="text-4xl font-semibold text-white mb-4">
+          <div className="text-center h-20vh">
+            <div className="mb-4 text-4xl font-semibold text-white">
               {voteTeam?.name} 팀
             </div>
-            <div className="text-6xl font-extrabold text-yellow-400 mb-6">
+            <div className="mb-6 text-6xl font-extrabold text-yellow-400">
               {seconds}초
             </div>
             <div className="text-2xl text-white">투표가 진행 중입니다!</div>
@@ -267,7 +333,7 @@ export default function Home() {
                   </g>
 
                   <path
-                    onClick={onClickHeart}
+                    onClick={onClickCancelVote}
                     id="Heart_2_"
                     className="st7"
                     d="M131.9,110.7c-6.8-6.3-17.4-6-23.7,0.8c-6.3,6.8-6,17.4,0.8,23.7l14.4,13.5l11.5,10.7l11.5-10.7 l14.4-13.5c6.8-6.3,7.1-16.9,0.8-23.7c-6.3-6.8-16.9-7.1-23.7-0.8l-2.9,2.7"
@@ -292,7 +358,7 @@ export default function Home() {
                   <style type="text/css">{`.st9{fill:#3b3b3b;}`}</style>
                   <g>
                     <path
-                      onClick={onClickHeart}
+                      onClick={onClickVote}
                       id="Heart_2_"
                       className="st9 "
                       d="M131.9,110.7c-6.8-6.3-17.4-6-23.7,0.8c-6.3,6.8-6,17.4,0.8,23.7l14.4,13.5l11.5,10.7l11.5-10.7 l14.4-13.5c6.8-6.3,7.1-16.9,0.8-23.7c-6.3-6.8-16.9-7.1-23.7-0.8l-2.9,2.7"
@@ -304,8 +370,8 @@ export default function Home() {
           </div>
         </>
       ) : (
-        <div className="text-center text-white text-2xl">
-          아직 투표 ㄴㄴ 입니다
+        <div className="text-2xl text-center text-white">
+          님들 김명간 개패고 싶지 않음?
         </div>
       )}
     </div>
