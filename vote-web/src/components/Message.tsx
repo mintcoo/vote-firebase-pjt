@@ -63,7 +63,7 @@ function Message({
               </div>
               {date && (
                 <div
-                  className={`${data.type === "text" ? `bg-[#FB6B9F]` : `bg-[#8f2b50]`} flex flex-col items-center px-2 py-1 break-all  rounded-tr-none lg:px-3 lg:py-2 rounded-2xl w-fit max-w-[60%] lg:max-w-[80%]`}
+                  className={`${data.type === "text" ? `bg-[#FB6B9F]` : `bg-[#8f2b50]`} flex flex-col items-center px-2 py-1 break-all  rounded-tr-none lg:px-3 lg:py-2 rounded-2xl w-fit max-w-[75%]`}
                 >
                   {data.type === "news" && (
                     <img

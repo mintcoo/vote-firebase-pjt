@@ -110,7 +110,7 @@ const Chatting = ({ setOpenChat }: IChattingProps) => {
         className="flex flex-col justify-center w-full h-full text-white"
       >
         <div className="w-full h-[6%] bg-[#3a103f] flex items-center justify-between px-3">
-          <div className="flex items-center h-full text-xs font-medium lg:font-semibold lg:text-lg ">
+          <div className="flex items-center h-full text-base font-medium lg:font-semibold lg:text-lg ">
             공개응원방
           </div>
           {/* <img
@@ -136,7 +136,7 @@ const Chatting = ({ setOpenChat }: IChattingProps) => {
           {/* 메시지들 보이는 곳 */}
           <div ref={chatDiv} className="w-[98%] h-full overflow-y-auto">
             {/* 대화 시작 시간 */}
-            <div className="flex items-center justify-center w-full pr-5 my-2 h-fit ">
+            <div className="flex items-center justify-center w-full my-2 h-fit ">
               <span className="px-5 py-1 text-xs text-center lg:text-base w-fit h-fit bg-[#741f80] rounded-3xl">
                 {messageDatas[0]?.createdAt
                   .toDate()
@@ -188,8 +188,8 @@ const Chatting = ({ setOpenChat }: IChattingProps) => {
                 if (prevDate !== currentDate) {
                   return (
                     <>
-                      <div className="flex items-center justify-center w-full pr-5 my-2 h-fit ">
-                        <span className="px-5 py-1 text-xs text-center lg:text-base w-fit h-fit bg-[#ff8ab5] rounded-3xl">
+                      <div className="flex items-center justify-center w-full my-2 h-fit ">
+                        <span className="px-5 py-1 text-xs text-center lg:text-base w-fit h-fit bg-[#741f80] rounded-3xl">
                           {currentDate}
                         </span>
                       </div>
@@ -224,16 +224,7 @@ const Chatting = ({ setOpenChat }: IChattingProps) => {
           >
             <div className="border-[1px] border-[#74203f] rounded-lg w-5/6 flex justify-between items-center px-[0.7rem] py-[0.3rem] ">
               {/* 메시지 입력 */}
-              {/* {fileUpload && (
-              <div className="relative w-12 h-12 lg:w-20 lg:h-20 border-[0.1rem]">
-                <div
-                  onClick={deleteImage}
-                  className="absolute top-0 right-0 z-10 w-3 h-3 bg-black cursor-pointer hover:scale-105">
-                  <img src="public/chatting/cancel.png" alt="cancel" />
-                </div>
-                <img src={fileUpload} alt="fileImage" />
-              </div>
-            )} */}
+
               <input
                 className={`w-3/4 h-4 lg:h-10 bg-transparent outline-none px-1 lg:px-4 text-black text-xs lg:text-base`}
                 type="text"
@@ -244,11 +235,15 @@ const Chatting = ({ setOpenChat }: IChattingProps) => {
               />
               {/* 메시지 전송 */}
               <label htmlFor="sendMsg">
-                <img
+                {/* <img
                   className={`w-4 h-4 lg:min-w-9 lg:min-h-8 lg:w-9 lg:h-8 opacity-60 hover:opacity-100 cursor-pointer`}
-                  src={"./send.png"}
+                  src="/send.png"
                   alt="send"
-                />
+                /> */}
+                <div
+                  className="w-4 h-4 bg-no-repeat bg-contain cursor-pointer lg:min-w-9 lg:min-h-8 lg:w-9 lg:h-8 opacity-60 hover:opacity-100 send-icon"
+                  aria-label="send"
+                ></div>
               </label>
               <input className="hidden" type="submit" id="sendMsg" />
             </div>
