@@ -5,11 +5,18 @@
 body {
   margin: 0;
   font-family: "Pretendard", sans-serif;
+  background-color: black;
 }
 
 @font-face {
   font-family: "Pretendard";
   src: url("../public/fonts/PretendardVariable.ttf");
+}
+
+.bg-custom {
+  background-image: url("../public/bg.png");
+  background-size: cover;
+  background-position: center;
 }
 
 @layer components {
@@ -22,15 +29,21 @@ body {
 
   /* 버튼 모음 */
   .btn-white {
-    @apply rounded border border-sky-900 text-sm text-sky-950 bg-white hover:bg-sky-50 font-semibold;
+    @apply text-sm font-semibold bg-white border rounded border-sky-900 text-sky-950 hover:bg-sky-50;
   }
   .btn-red-outlined {
-    @apply rounded border border-red-500 text-sm text-red-700 bg-white hover:bg-red-100 font-semibold;
+    @apply text-sm font-semibold text-red-700 bg-white border border-red-500 rounded hover:bg-red-100;
+  }
+  .btn-blue-outlined {
+    @apply text-sm font-semibold text-blue-700 bg-white border border-blue-500 rounded hover:bg-blue-100;
   }
   .btn-dark-blue {
-    @apply rounded border border-sky-900  bg-sky-900 text-sm text-white hover:bg-sky-800;
+    @apply text-sm text-white border rounded border-sky-900 bg-sky-900 hover:bg-sky-800;
+  }
+  .btn-gray {
+    @apply text-sm text-white bg-gray-700 border rounded border-sky-900;
   }
   .btn-blue {
-    @apply rounded border border-sky-900  bg-sky-600 text-sm text-white hover:bg-sky-500;
+    @apply text-sm text-white border rounded border-sky-900 bg-sky-600 hover:bg-sky-500;
   }
 }

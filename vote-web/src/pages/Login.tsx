@@ -23,14 +23,14 @@ export default function Login() {
     event.preventDefault();
     try {
       await signInWithEmailAndPassword(authService, email, password);
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       alert("아이디 또는 비밀번호를 확인해주세요");
     }
   };
 
   return (
-    <div className="f-c-c w-full h-screen bg-sky-100">
+    <div className="w-full h-screen f-c-c bg-sky-100">
       <div className="w-full p-6 m-auto bg-white border rounded-md drop-shadow-lg lg:max-w-xl">
         <h1 className="text-3xl font-semibold text-center text-blue-900">
           경기창조혁신센터 워크샵
