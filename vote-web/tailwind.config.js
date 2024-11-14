@@ -32,11 +32,22 @@ module.exports = {
       },
       animation: {
         ring: "ring 3.5s ease-in-out infinite",
+        jump: "jump 1s ease-in-out infinite",
       },
       keyframes: {
         bounce: {
           "0%, 100%": {
             transform: "translateY(-8%)",
+            "animation-timing-function": "cubic-bezier(0.8,0,1,1)",
+          },
+          "50%": {
+            transform: "translateY(0)",
+            "animation-timing-function": "cubic-bezier(0,0,0.2,1)",
+          },
+        },
+        jump: {
+          "0%, 100%": {
+            transform: "translateY(-100%)",
             "animation-timing-function": "cubic-bezier(0.8,0,1,1)",
           },
           "50%": {

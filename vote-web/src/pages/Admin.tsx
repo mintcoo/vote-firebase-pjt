@@ -194,12 +194,32 @@ export default function Admin() {
         const docRef = doc(db, "공지사항", docId);
         await updateDoc(docRef, {
           notice: inputNotice,
+          animation: "",
         });
       }
     } catch (e) {
       console.log("notice error:", e);
     } finally {
       setInputNotice("");
+    }
+  };
+
+  // 공지사항 animation
+  const onChangeAnimation = async (animation: string) => {
+    try {
+      const noticeRef = collection(db, "공지사항");
+      const noticeQuery = query(noticeRef); // 참가팀 쿼리
+      const querySnapshot = await getDocs(noticeQuery);
+
+      if (!querySnapshot.empty) {
+        const docId = querySnapshot.docs[0].id;
+        const docRef = doc(db, "공지사항", docId);
+        await updateDoc(docRef, {
+          animation: animation,
+        });
+      }
+    } catch (e) {
+      console.log("animation error:", e);
     }
   };
 
@@ -339,6 +359,48 @@ export default function Admin() {
           className="px-4 py-2 text-white transition duration-200 bg-blue-500 rounded-md hover:bg-blue-600"
         >
           공지
+        </button>
+      </div>
+      <div className="flex gap-3 mt-5">
+        <button
+          onClick={() => {
+            onChangeAnimation("");
+          }}
+          className={`px-4 py-1 btn-blue-outlined`}
+        >
+          기본
+        </button>
+        <button
+          onClick={() => {
+            onChangeAnimation("animate-jump");
+          }}
+          className={`px-4 py-1 btn-blue-outlined`}
+        >
+          점프
+        </button>
+        <button
+          onClick={() => {
+            onChangeAnimation("animate-spin");
+          }}
+          className={`px-4 py-1 btn-blue-outlined`}
+        >
+          스핀
+        </button>
+        <button
+          onClick={() => {
+            onChangeAnimation("animate-ring");
+          }}
+          className={`px-4 py-1 btn-blue-outlined`}
+        >
+          흔들
+        </button>
+        <button
+          onClick={() => {
+            onChangeAnimation("animate-ping");
+          }}
+          className={`px-4 py-1 btn-blue-outlined`}
+        >
+          두근
         </button>
       </div>
     </div>

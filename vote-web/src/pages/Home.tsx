@@ -39,6 +39,7 @@ export default function Home() {
   const [notice, setNotice] = useState<string>("");
   // 접속자수
   const [users, setUsers] = useState<number>(0);
+  const [animation, setAnimation] = useState<string>("");
 
   // 실시간 투표 팀
   const fetchVoteTeam = async () => {
@@ -61,8 +62,9 @@ export default function Home() {
 
     const unsubscribe = await onSnapshot(noticeQuery, (snapshot) => {
       snapshot.docs.map((doc) => {
-        const { notice } = doc.data();
+        const { notice, animation } = doc.data();
         setNotice(notice);
+        setAnimation(animation);
       });
     });
 
@@ -529,7 +531,9 @@ export default function Home() {
             </div>
           </>
         ) : (
-          <div className="text-2xl text-center text-white">{notice}</div>
+          <div className={`text-3xl text-center text-white ${animation}`}>
+            {notice}
+          </div>
         )}
       </div>
       {openChat && (
